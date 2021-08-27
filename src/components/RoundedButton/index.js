@@ -19,8 +19,8 @@ export const RoundedButton = ({
 const styles = (size, type) => StyleSheet.create({
     radius: {
         borderRadius: type === 'circle' ? size/2 : 4,
-        width: size,
-        height: size,
+        width: type === 'rectangle' ? size*2 : size,
+        height: type === 'rectangle' ? size*0.75 : size,
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 2,
@@ -29,6 +29,6 @@ const styles = (size, type) => StyleSheet.create({
 
     text: {
         color: colors.mainWhite,
-        fontSize: size/2,
+        fontSize: size/2.5,
     }
 })
