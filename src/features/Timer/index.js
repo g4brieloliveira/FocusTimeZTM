@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Vibration, Platform } from 'react-native'
 import { ProgressBar } from 'react-native-paper'
+import { useKeepAwake } from 'expo-keep-awake'
+
 import { CountDown } from '../../components/Countdown';
 import { RoundedButton } from '../../components/RoundedButton';
 import { Timing } from '../../components/Timing';
@@ -8,8 +10,11 @@ import { Timing } from '../../components/Timing';
 import { colors } from '../../utils/colors';
 import { fontSizes, spacingSizes } from '../../utils/sizes';
 
-export const Timer = ({ focusSubject, setFocusSubject }) => {
-    const [minutes, setMinutes] = useState(1)
+
+const DEFAULT_TIME = 0.1
+export const Timer = ({ focusSubject, onTimerEnd, clearSubject }) => {
+    useKeepAwake();
+    const [minutes, setMinutes] = useState(DEFAULT_TIME)
     const [isStarted, setIsStarted] = useState(false)
     const [progress, setProgress] = useState(1)
 
@@ -21,6 +26,23 @@ export const Timer = ({ focusSubject, setFocusSubject }) => {
         setMinutes(min)
         setProgress(1)
         setIsStarted(false)
+    }
+
+    const Vibrate = () => {
+        if(Platform.OS === 'ios'){
+            const interval =  setInterval(() =>  Vibration.vibrate(), 1000)
+            setTimeout(() => clearInterval(interval), 10000)
+        } else  {
+            Vibration.vibrate(5000)
+        }
+    }
+
+    const onEnd = () =>  {
+        Vibrate()
+        setMinutes(DEFAULT_TIME)
+        setProgress(1)
+        setIsStarted(false)
+        onTimerEnd()
     }
 
     return (
@@ -39,7 +61,12 @@ export const Timer = ({ focusSubject, setFocusSubject }) => {
                 </View>
 
                 <View style={ styles().countdown }>
-                    <CountDown minutes={ minutes } isPaused={ !isStarted } onProgress={ onProgress }/>
+                    <CountDown 
+                    minutes={ minutes } 
+                    isPaused={ !isStarted } 
+                    onProgress={ onProgress }
+                    onEnd={ onEnd }
+                    />
                 </View>
 
                 <View style={ styles().buttons }>
@@ -61,7 +88,7 @@ export const Timer = ({ focusSubject, setFocusSubject }) => {
                                 title={"Cancelar"} 
                                 size={80} 
                                 type="rectangle"
-                                onPress={() => setFocusSubject(null) }
+                                onPress={() => clearSubject() }
                                 style={ styles(isStarted).cancelButton }
                             />
                         </View>
