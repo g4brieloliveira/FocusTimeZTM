@@ -9,7 +9,7 @@ const formatTime = (time) => time < 10 ? `0${time}` : time;
 
 
 export const CountDown = ({
-    minutes = 1,
+    minutes,
     isPaused,
     onProgress,
     onEnd
@@ -23,11 +23,9 @@ export const CountDown = ({
         setMillis((time) => {
             if(time === 0) {
                 clearInterval(interval.current)
-                onEnd()
                 return time;
             }
             const timeLeft = time - 1000
-            onProgress(timeLeft / minutesToMillis(minutes))
             return timeLeft;
         })
     }
@@ -40,6 +38,13 @@ export const CountDown = ({
         interval.current = setInterval(countDown, 1000)
         return () => clearInterval(interval.current)
     }, [isPaused])
+
+    useEffect(() => {
+        onProgress(millis / minutesToMillis(minutes))
+        if (millis === 0){
+            onEnd()
+        }
+    }, [millis])
 
     useEffect(() => {
         setMillis(minutesToMillis(minutes))

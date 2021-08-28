@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Focus } from './src/features/Focus'
 import { Timer } from './src/features/Timer';
 
 import { colors } from './src/utils/colors';
-import { fontSizes, spacingSizes } from './src/utils/sizes'
+import { spacingSizes } from './src/utils/sizes'
 import { FocusHistory } from './src/components/FocusHistory';
 
 const STATUSES = {
@@ -20,7 +20,7 @@ export default function App() {
   const [focusHistory, setFocusHistory] = useState([])
 
   const addFocusHistorySubjectWithState = (subject, status) => {
-    setFocusHistory([...focusHistory, { subject, status }])
+    setFocusHistory([...focusHistory, { key: String(focusHistory.length + 1) ,subject, status }])
   }
 
   const onClear = () => {

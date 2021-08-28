@@ -11,7 +11,7 @@ import { colors } from '../../utils/colors';
 import { fontSizes, spacingSizes } from '../../utils/sizes';
 
 
-const DEFAULT_TIME = 0.1
+const DEFAULT_TIME = 1
 export const Timer = ({ focusSubject, onTimerEnd, clearSubject }) => {
     useKeepAwake();
     const [minutes, setMinutes] = useState(DEFAULT_TIME)
@@ -23,7 +23,7 @@ export const Timer = ({ focusSubject, onTimerEnd, clearSubject }) => {
     }
 
     const changeTime = (min) => {
-        setMinutes(min)
+        setMinutes(minutes + min)
         setProgress(1)
         setIsStarted(false)
     }

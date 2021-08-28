@@ -4,7 +4,7 @@ import { colors } from '../../utils/colors';
 import { fontSizes, spacingSizes } from '../../utils/sizes';
 import { RoundedButton } from '../RoundedButton';
 
-const HistoryItem = ({ item, index }) => {
+const HistoryItem = ({ item }) => {
     return (
         <View style={ styles.itemView }>
             <Text style={ styles.historyItem(item.status) }>
